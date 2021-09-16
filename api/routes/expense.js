@@ -4,8 +4,6 @@ const moment = require('moment');
 
 route.post("/", async (req, res) => {
     try {
-        let val = moment();
-        res.status(200).json({ "val": val })
         let spentMoney = new SpentMoney({
             createdAt: moment(),
             spentMoney: req.body.spentMoney ? req.body.spentMoney : "",
@@ -25,8 +23,16 @@ route.post("/", async (req, res) => {
         res.status(500).json({ "error": err })
     }
 })
-route.get("/", (req, res) => {
-
+route.get("/", async (req, res) => {
+    try {
+        let spentMoney = await SpentMoney.find();
+        res.status(200).json({
+            "spentMoney": spentMoney
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ "error": err })
+    }
 });
 
 module.exports = route;
