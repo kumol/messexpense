@@ -6,7 +6,7 @@ route.post("/", async (req, res) => {
     try {
         let spentMoney = new SpentMoney({
             createdAt: moment(),
-            spentMoney: req.body.spentMoney ? req.body.spentMoney : "",
+            spentMoney: req.body.spentMoney ? req.body.spentMoney : 0,
             date: moment().format("DD-MM-YYYY"),
             time: moment().format('LT'),
             day: moment().day("D"),
