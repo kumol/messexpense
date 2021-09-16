@@ -35,4 +35,13 @@ route.get("/", async (req, res) => {
     }
 });
 
+route.get("/spent-money", async(req,res)=>{
+    try{
+        let spent = await SpentMoney.aggregate([{$match:{user:1}},{$group:{_id:"$date",cost:{$sum:"$spentMoney"}}}]);
+        res.status(200).json({"body": spent})
+    }catch(err){
+        res.status(500).json({ "error": err })
+    }
+})
+
 module.exports = route;
