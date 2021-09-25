@@ -23,17 +23,32 @@ router.post("/", async(req,res,next)=>{
         }),
         newGroup = await group.save();
         res.status(200).json({
-            body:{"group":newGroup}
+            "message": "Successfully created",
+            "body":{"group":newGroup}
         })
     }catch(error){
         res.status(500).json({
-            body:{"error":error}
+            "message": "Failed while creating new group",
+            "body":{"error":error}
         })
     }
 });
 
-router.put("/:id",(req,res)=>{
-
+router.put("/:id", async(req,res,next)=>{
+    try{
+        let updatedGroup = {...req.body},
+            group = await group.updateOne({_id: req.params.id},{$set:updatedGroup});
+        
+        res.status(200).json({
+            "message": "Successfully updated",
+            "body":{"group":group}
+        })
+    }catch(error){
+        res.status(500).json({
+            "message": "Update failed!",
+            "body":{"error":error}
+        })
+    }
 })
 
 module.exports = router;
