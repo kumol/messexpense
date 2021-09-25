@@ -37,7 +37,7 @@ router.post("/", async(req,res,next)=>{
 router.put("/:id", async(req,res,next)=>{
     try{
         let updatedGroup = {...req.body},
-            group = await group.updateOne({_id: req.params.id},{$set:updatedGroup});
+            group = await group.findOneAndUpdate({_id: req.params.id},{$set:updatedGroup},{new: true});
         
         res.status(200).json({
             "message": "Successfully updated",
@@ -46,6 +46,38 @@ router.put("/:id", async(req,res,next)=>{
     }catch(error){
         res.status(500).json({
             "message": "Update failed!",
+            "body":{"error":error}
+        })
+    }
+});
+
+router.put("/user/:id", async(req,res)=>{
+    try{
+        let user = req.body.user,
+        group = await Group.findOneAndUpdate({id: req.params.id},{$addToSet:{"user":user}},{new: true});
+        res.status(200).json({
+            "message": "Successfully updated",
+            "body":{"group":group}
+        })
+    }catch(error){
+        res.status(500).json({
+            "message": "Adding new user failed!",
+            "body":{"error":error}
+        })
+    }
+})
+
+router.delete("/user/:id", async(req,res)=>{
+    try{
+        let user = req.body.user,
+        group = await Group.findOneAndUpdate({id: req.params.id},{$pop:{"user":user}},{new: true});
+        res.status(200).json({
+            "message": "Successfully updated",
+            "body":{"group":group}
+        })
+    }catch(error){
+        res.status(500).json({
+            "message": "Adding new user failed!",
             "body":{"error":error}
         })
     }
