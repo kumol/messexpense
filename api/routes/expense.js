@@ -7,7 +7,7 @@ route.post("/", async (req, res) => {
         let spentMoney = new SpentMoney({
             createdAt: moment(),
             spentMoney: req.body.spentMoney ? req.body.spentMoney : 0,
-            date: moment().format("DD-MM-YYYY"),
+            date: moment().format("YYYY-MM-DD"),
             time: moment().format('LT'),
             day: moment().day("D"),
             year: moment().year(),
@@ -37,7 +37,7 @@ route.get("/", async (req, res) => {
 
 route.get("/spent-money", async(req,res)=>{
     try{
-        let spent = await SpentMoney.aggregate([{$match:{user:1}},{$group:{_id:"$date",cost:{$sum:"$spentMoney"}}}]);
+        let spent = await SpentMoney.aggregate([{$match:{user:1}},{$group:{_id:"$date",cost:{$sum:"$spentMoney"}}},{$limit:1}]);
         res.status(200).json({"body": spent})
     }catch(err){
         res.status(500).json({ "error": err })

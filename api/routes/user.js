@@ -7,7 +7,7 @@ route.post("/", async (req, res) => {
             newUser = new User({
                 name: req.body.name,
                 password: req.body.password,
-                id: 1
+                id: counter+1
             })
         let user = await newUser.save();
         res.status(200).json({ "user": user });
