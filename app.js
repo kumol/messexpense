@@ -1,9 +1,10 @@
 const express = require("express");
 const app = express();
 require("./models/db");
-ExpenseMoney = require("./models/expense");
 const expenseRouter = require("./api/routes/expense");
 const userRouter = require("./api/routes/user");
+const groupRouter = require("./api/routes/group");
+const groupExpenseRouter = require("/api/routes/group/expense");
 
 var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -15,3 +16,5 @@ app.listen(4000, (err) => {
 
 app.use("/money", expenseRouter);
 app.use("/user", userRouter);
+app.use("/group", groupRouter);
+app.use("/group-expense", groupExpenseRouter);
