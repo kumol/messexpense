@@ -4,7 +4,7 @@ require("./models/db");
 const expenseRouter = require("./api/routes/expense");
 const userRouter = require("./api/routes/user");
 const groupRouter = require("./api/routes/group");
-const groupExpenseRouter = require("/api/routes/group/expense");
+const groupExpenseRouter = require("./api/routes/groupexpense");
 
 var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))

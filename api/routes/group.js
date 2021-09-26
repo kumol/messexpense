@@ -2,6 +2,14 @@ const Group = require("../../models/group");
 
 const router = require("express").Router();
 
+router.get("/", async(req,res)=>{
+    try{
+        let group = await Group.find({});
+        res.status(200).json({"group":group})
+    }catch(err){
+        res.status(500).json({"error": err});
+    }
+});
 router.get("/:id", async(req,res)=>{
     try{
         let group = await Group.find({_id: req.params.id});
@@ -13,7 +21,7 @@ router.get("/:id", async(req,res)=>{
 
 router.post("/", async(req,res,next)=>{
     try{
-        let count = Group.count(),
+        let count = await Group.find({}).count(),
         group = new Group({
             "name": req.body.name,
             "password": req.body.password,

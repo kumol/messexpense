@@ -1,5 +1,5 @@
 const route = require("express").Router();
-const SpentMoney = require("../../models/expense");
+const SpentMoney = require("../../models/groupexpense");
 const moment = require('moment');
 
 route.post("/", async (req, res) => {
