@@ -42,7 +42,7 @@ route.get("/group/:id",async(req,res)=>{
 
 route.post('/', async(req,res,next)=>{
     try{
-        let count = await GroupExpense.find({}).count(),
+        let count = await GroupExpense.find({}).count();
             count = count ? count: 0;
         let newExpense = new GroupExpense({
             "id": count + 1,
@@ -68,10 +68,19 @@ route.post('/', async(req,res,next)=>{
     }
 });
 
-route.put("/",(req,res)=>{
-    let updateObj = {...req.body};
+route.put("/", async(req,res)=>{
+    try{
+        let updateObj = {...req.body};
         updateObj["createdAt"] = new Date();
-    let expense = GroupExpense.updateOne({id:req.params.id},{$set:updateObj});
-    
+        let expense = GroupExpense.findOneAndUpdate({id:req.params.id},{$set:updateObj},{new:true});
+        res.status(200).json({
+            "body":{
+                "expense": expense
+            }
+        })
+    }catch(err){
+        res.status(500).json({"error": error});
+    }
+
 })
 module.exports = route;
