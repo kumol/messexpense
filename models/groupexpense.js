@@ -9,5 +9,6 @@ module.exports = mongoose.model("GroupExpense", mongoose.Schema({
     day: String,
     month: String,
     year: String,
-    details: String
+    details: String,
+    updatedAt: Date
 }));
