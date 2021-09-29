@@ -10,10 +10,13 @@ var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.listen(4000, (err) => {
-    console.log("connected port 4000");
+app.listen(5000, (err) => {
+    console.log("connected port 5000");
 });
 
+app.get("/",(req,res)=>{
+    res.send("Hello World");
+})
 app.use("/money", expenseRouter);
 app.use("/user", userRouter);
 app.use("/group", groupRouter);
