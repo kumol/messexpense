@@ -1,3 +1,4 @@
+const { Router } = require("express");
 const User = require("../../models/user");
 const route = require("express").Router();
 
@@ -7,7 +8,14 @@ route.post("/", async (req, res) => {
             newUser = new User({
                 name: req.body.name,
                 password: req.body.password,
-                id: counter+1
+                id: counter+1,
+                group:{
+                    id: req.body.group ? req.body.group : user.group.id,
+                    deposite: req.params.deposite ? req.params.deposite : 0,
+                    mealCount: req.params.mealCount ? req.params.mealCount : 0,
+                    expense: req.params.expense ? req.params.expense : 0,
+                    dueAmount: req.params.dueAmount ? req.params.dueAmount : 0,
+                }
             })
         let user = await newUser.save();
         res.status(200).json({ "user": user });
@@ -22,6 +30,16 @@ route.post("/", async (req, res) => {
         res.status(200).json({ "user": user });
     } catch (err) {
         res.status(500).json({ "error": err })
+    }
+})
+
+route.get("/group/:id", async(req,res)=>{
+    try{
+        let id = req.params.id;
+        let user = await User.find({"group.id": id});
+        res.status(200).json({ "members": user });
+    }catch(error){
+        res.status(500).json({ "error": err });
     }
 })
 

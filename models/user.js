@@ -4,6 +4,7 @@ module.exports = mongoose.model("User", mongoose.Schema({
     password: String,
     id: Number,
     group:{
+        id: Number,
         deposite: Number,
         mealCount: Number,
         expense: Number,
