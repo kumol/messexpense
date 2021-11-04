@@ -5,7 +5,7 @@ route.get("/", async(req,res,next)=>{
     try{
         let group = await GroupExpense.find({});
         return res.status(200).json({
-            "body": {"group": group}
+            "expense": group
         });
     }catch(error){
         res.status(500).json({
@@ -29,9 +29,9 @@ route.get("/:id", async(req,res,next)=>{
 
 route.get("/group/:id",async(req,res)=>{
     try{
-        let group = await GroupExpense.find({group: req.params.id});
+        let expense = await GroupExpense.find({group: req.params.id});
         return res.status(200).json({
-            "body": {"group": group}
+            "expenses": expense
         });
     }catch(error){
         res.status(500).json({
@@ -59,9 +59,7 @@ route.post('/', async(req,res,next)=>{
         }),
         expense = await newExpense.save();
         res.status(200).json({
-            "body":{
-                "expense": expense
-            }
+            "expense": expense
         })
     }catch(error){
         res.status(500).json({"error": error});

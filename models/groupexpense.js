@@ -10,5 +10,6 @@ module.exports = mongoose.model("GroupExpense", mongoose.Schema({
     month: String,
     year: String,
     details: String,
-    updatedAt: Date
+    updatedAt: Date,
+    user: Number
 }));
