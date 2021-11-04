@@ -35,8 +35,21 @@ route.post("/", async (req, res) => {
 
 route.get("/group/:id", async(req,res)=>{
     try{
-        let id = req.params.id;
-        let user = await User.find({"group.id": id});
+        let id = Number(req.params.id),
+         user = await User.aggregate([{
+            $match:{"group.id": id}
+        },{
+            $project:{
+                "name": "$name",
+                "id": "$id",
+                "groupId": "$group.id",
+                "deposite": "$group.deposite",
+                "mealCount": "$group.mealCount",
+                "expense": "$group.expense",
+                "dueAmount": "$group.dueAmount"
+            }
+        }]);
+        console.log("responsing");
         res.status(200).json({ "members": user });
     }catch(error){
         res.status(500).json({ "error": err });

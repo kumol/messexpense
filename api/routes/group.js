@@ -13,6 +13,20 @@ router.get("/", async(req,res)=>{
 router.get("/:id", async(req,res)=>{
     try{
         let group = await Group.find({_id: req.params.id});
+        
+         group = await Group.aggregate([{
+            $match:{_id: req.params.id}
+        },{
+            $project:{
+                "name": "$name",
+                "id": "$id",
+                "groupId": "$group.id",
+                "deposite": "$group.deposite",
+                "mealCount": "$group.mealCount",
+                "expense": "$group.expense",
+                "dueAmount": "$group.dueAmount"
+            }
+        }])
         res.status(200).json({"group":group})
     }catch(err){
         res.status(500).json({"error": err});
