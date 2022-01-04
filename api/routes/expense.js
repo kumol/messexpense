@@ -1,5 +1,5 @@
 const route = require("express").Router();
-const SpentMoney = require("../../models/groupexpense");
+const SpentMoney = require("../../models/expense");
 const moment = require('moment');
 
 route.post("/", async (req, res) => {
@@ -12,8 +12,10 @@ route.post("/", async (req, res) => {
             day: moment().day("D"),
             year: moment().year(),
             month: moment().format("M"),
+            details: req.body.details,
             user: 1
-        })
+        });
+        spentMoney.id = spentMoney._id;
         spentMoney = await spentMoney.save();
         res.status(200).json({
             "spentMoney": spentMoney
