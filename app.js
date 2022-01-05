@@ -1,5 +1,17 @@
 const express = require("express");
+require('dotenv').config()
 const app = express();
+const Sentry = require("@sentry/node");
+const Tracing = require("@sentry/tracing");
+Sentry.init({ dsn: process.env.SENTRY_DSN, integrations: [
+  new Sentry.Integrations.Http({ tracing: true }),
+  new Tracing.Integrations.Express({
+    app,
+  })
+],tracesSampleRate: 1.0,});
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
+app.use(Sentry.Handlers.errorHandler());
 var cors = require('cors')
 app.use(cors());
 require("./models/db");
@@ -11,12 +23,12 @@ var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.listen(5000, (err) => {
-    console.log("connected port 5000");
+app.listen(process.env.PORT, (err) => {
+    console.log("connected port " +process.env.PORT);
 });
 
 app.get("/",(req,res)=>{
-    res.json({"isContentBlocked": true});
+    res.json({"isContentAvailable": true});
 });
 app.post("/",cors(),(req,res)=>{
     console.log(req.body);
