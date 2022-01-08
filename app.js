@@ -28,7 +28,7 @@ app.listen(process.env.PORT, (err) => {
 });
 
 app.get("/",(req,res)=>{
-    res.send("Hello from expense");
+    res.send("Hello everyone");
 });
 app.post("/",cors(),(req,res)=>{
     console.log(req.body);
