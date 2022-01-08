@@ -39,12 +39,13 @@ route.get("/", async (req, res) => {
 
 route.get("/spent-money", async(req,res)=>{
     try{
-        
-        let all = await SpentMoney.aggregate([{$match:{user:1}},{$group:{_id:"$date", cost:{$sum:"$spentMoney"}}}]);
+        let groupQuery = {};
+        groupQuery = req.query.type == "monthly" ? {_id:"$month", cost:{$sum:"$spentMoney"}} : {_id:"$date", cost:{$sum:"$spentMoney"}};
+        let all = await SpentMoney.aggregate([{$match:{user:1}}, {$group:groupQuery}]);
         const total = all ? all.length : 0;
         let limit = req.query.limit ? +req.query.limit : total;
         let page = req.query.page && (+req.query.page>0)? +req.query.page : 1;
-        let spent = await SpentMoney.aggregate([{$match:{user:1}},{$group:{_id:"$date", cost:{$sum:"$spentMoney"}}}, {$skip: limit * (page-1)},{$limit:limit}]);
+        let spent = await SpentMoney.aggregate([{$match:{user:1}},{$group:groupQuery}, {$skip: limit * (page-1)},{$limit:limit}]);
         res.status(200).json({ "body": spent, page: page, limit: limit, total: total})
     }catch(err){
         res.status(500).json({ "error": err })

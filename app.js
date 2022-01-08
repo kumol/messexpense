@@ -28,7 +28,7 @@ app.listen(process.env.PORT, (err) => {
 });
 
 app.get("/",(req,res)=>{
-    res.json({"isContentAvailable": true});
+    res.send("Hello from expense");
 });
 app.post("/",cors(),(req,res)=>{
     console.log(req.body);
