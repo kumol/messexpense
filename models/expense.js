@@ -11,5 +11,9 @@ module.exports = mongoose.model("SpentMoney", mongoose.Schema({
     month: String,
     year: String,
     details: String,
+    type: {
+        type: String,
+        default: "regular"
+    },
     id: String
 }));

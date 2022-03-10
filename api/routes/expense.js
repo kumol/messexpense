@@ -1,6 +1,7 @@
 const route = require("express").Router();
 const SpentMoney = require("../../models/expense");
 const moment = require('moment');
+const router = require("./group");
 
 route.post("/", async (req, res) => {
     try {
@@ -8,10 +9,10 @@ route.post("/", async (req, res) => {
             createdAt: moment(),
             spentMoney: req.body.spentMoney ? req.body.spentMoney : 0,
             date: moment().format("YYYY-MM-DD"),
-            time: moment().format('LT'),
             day: moment().day("D"),
             year: moment().year(),
             month: moment().format("M"),
+            type: req.body.type,
             details: req.body.details,
             user: 1
         });
@@ -49,6 +50,75 @@ route.get("/spent-money", async(req,res)=>{
         res.status(200).json({ "body": spent, page: page, limit: limit, total: total})
     }catch(err){
         res.status(500).json({ "error": err })
+    }
+})
+
+route.get('/monthly-spent', async(req,res)=>{
+    try{
+        let query = {};
+        let {type} = req.query;
+        type ? query["type"] = type : null;
+        let data = await SpentMoney.aggregate([{
+            $match: query
+        },{
+            $group: {
+                _id: {
+                    date: "$date",
+                    month: "$month"
+                },
+                m: {
+                    $sum: "$spentMoney"
+                }
+            }
+        },{
+            $project: {
+                money: "$m",
+                date: "$_id.date",
+                month: "$_id.month"
+            }
+        },{
+            $sort: {
+                date: -1
+            }
+            },{
+            $group: {
+                _id: {
+                    month: "$month"
+                },
+                monthlyTotal: {
+                    $sum: "$money"
+                },
+                dates: {
+                    $push: {
+                        date: "$date",
+                        money: "$money"
+                    }
+                },
+                days: {
+                    $sum: 1
+                }
+            }
+        },{
+            $project: {
+                avgCost: {$divide:["$monthlyTotal", "$days"]},
+                _id: "$_id.month",
+                total: "$monthlyTotal",
+                dates: true,
+            }
+        },{
+            $sort: {
+                _id: -1
+            }
+            }]);
+        return res.json({
+            success: true,
+            statusCode: 200,
+            body: data
+        });
+    }catch(error){
+        return res.json({
+            error: error.stack
+        })
     }
 })
 
