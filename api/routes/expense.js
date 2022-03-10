@@ -9,10 +9,10 @@ route.post("/", async (req, res) => {
             createdAt: moment(),
             spentMoney: req.body.spentMoney ? req.body.spentMoney : 0,
             date: moment().format("YYYY-MM-DD"),
-            time: moment().format('LT'),
             day: moment().day("D"),
             year: moment().year(),
             month: moment().format("M"),
+            type: req.body.type,
             details: req.body.details,
             user: 1
         });
@@ -55,10 +55,11 @@ route.get("/spent-money", async(req,res)=>{
 
 route.get('/monthly-spent', async(req,res)=>{
     try{
+        let query = {};
+        let {type} = req.query;
+        type ? query["type"] = type : null;
         let data = await SpentMoney.aggregate([{
-            $match:{
-                type: "regular"
-            }
+            $match: query
         },{
             $group: {
                 _id: {
