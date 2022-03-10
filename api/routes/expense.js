@@ -46,7 +46,7 @@ route.get("/spent-money", async(req,res)=>{
         const total = all ? all.length : 0;
         let limit = req.query.limit ? +req.query.limit : total;
         let page = req.query.page && (+req.query.page>0)? +req.query.page : 1;
-        let spent = await SpentMoney.aggregate([{$match:{user:1}},{$group:groupQuery}, {$skip: limit * (page-1)},{$limit:limit}]);
+        let spent = await SpentMoney.aggregate([{$match:{user:1}},{$group:groupQuery}, {$skip: limit * (page-1)},{$limit:limit}]).sort({_id: -1});
         res.status(200).json({ "body": spent, page: page, limit: limit, total: total})
     }catch(err){
         res.status(500).json({ "error": err })
