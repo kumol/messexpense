@@ -33,15 +33,22 @@ route.get("/", async (req, res) => {
         limit = +limit || 20;
         let total = await SpentMoney.countDocuments();
         let spentMoney = await SpentMoney.find().sort({_id: -1}).skip(limit*(page-1)).limit(limit*page).lean();
-        res.status(200).json({
+        return spentMoney && spentMoney.length>0 ? res.status(200).json({
             success: true,
+            statusCode: 200,
             page: page,
             limit: limit,
             total: total,
             body: spentMoney
-        });
+        }) : res.json({
+            success: false,
+            statusCode: 204,
+            page: page,
+            limit: limit,
+            total: total,
+            body: []
+        })
     } catch (err) {
-        console.log(err);
         res.status(500).json({ "error": err })
     }
 });
