@@ -19,7 +19,9 @@ route.post("/", async (req, res) => {
         spentMoney.id = spentMoney._id;
         spentMoney = await spentMoney.save();
         res.status(200).json({
-            "spentMoney": spentMoney
+            statusCode: 200,
+            success: true,
+            "body": spentMoney
         });
     } catch (err) {
         console.log(err);
