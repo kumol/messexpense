@@ -28,9 +28,17 @@ route.post("/", async (req, res) => {
 })
 route.get("/", async (req, res) => {
     try {
-        let spentMoney = await SpentMoney.find();
+        let { page, limit} = req.query;
+        page = +page || 1;
+        limit = +limit || 20;
+        let total = await SpentMoney.countDocuments();
+        let spentMoney = await SpentMoney.find().sort({_id: -1}).skip(limit*(page-1)).limit(limit*page).lean();
         res.status(200).json({
-            "spentMoney": spentMoney
+            success: true,
+            page: page,
+            limit: limit,
+            total: total,
+            body: spentMoney
         });
     } catch (err) {
         console.log(err);
