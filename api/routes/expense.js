@@ -73,8 +73,9 @@ route.get("/spent-money", async(req,res)=>{
 route.get('/monthly-spent', async(req,res)=>{
     try{
         let query = {};
-        let {type} = req.query;
+        let {type, month} = req.query;
         type ? query["type"] = type : null;
+        month ? query["month"] = month : null;
         let data = await SpentMoney.aggregate([{
             $match: query
         },{
