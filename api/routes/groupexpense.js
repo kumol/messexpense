@@ -4,8 +4,13 @@ const moment = require("moment");
 route.get("/", async(req,res,next)=>{
     try{
         let expense = await GroupExpense.find({});
+        let total = 0;
+        expense.map(o=>{
+            total += o.spentMoney;
+        });
         return res.status(200).json({
             body: expense,
+            total: total,
             success: true,
             statusCode: 200,
             message: "content found"
