@@ -1,15 +1,11 @@
 const mongoose = require("mongoose");
 module.exports = mongoose.model("GroupExpense", mongoose.Schema({
-    id: Number,
-    createdAt: Date,
+    id: String,
+    createdAt: String,
     spentMoney: Number,
     date: String,
-    time: String,
-    group: Number,
-    day: String,
-    month: String,
-    year: String,
+    group: String,
     details: String,
-    updatedAt: Date,
-    user: Number
+    createdBy: String,
+    type: String
 }));

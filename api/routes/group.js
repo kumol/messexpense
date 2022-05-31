@@ -35,15 +35,15 @@ router.get("/:id", async(req,res)=>{
 
 router.post("/", async(req,res,next)=>{
     try{
-        let count = await Group.find({}).count(),
-        group = new Group({
+        
+        let group = new Group({
             "name": req.body.name,
             "password": req.body.password,
-            "id": count? count+1 : 1,
-            "user":req.body.user,
+            "user": req.body.user,
             "creator": req.body.creator,
-        }),
-        newGroup = await group.save();
+        });
+        group.id = group._id;
+        let newGroup = await group.save();
         res.status(200).json({
             "message": "Successfully created",
             "body":{"group":newGroup}

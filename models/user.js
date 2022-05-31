@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 module.exports = mongoose.model("User", mongoose.Schema({
     name: String,
     password: String,
-    id: Number,
+    id: String,
     group:{
-        id: Number,
+        id: String,
         deposite: Number,
         mealCount: Number,
         expense: Number,

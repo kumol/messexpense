@@ -4,19 +4,18 @@ const route = require("express").Router();
 
 route.post("/", async (req, res) => {
     try {
-        let counter = await User.find({}).count(),
-            newUser = new User({
-                name: req.body.name,
-                password: req.body.password,
-                id: counter+1,
-                group:{
-                    id: req.body.group ? req.body.group : user.group.id,
-                    deposite: req.params.deposite ? req.params.deposite : 0,
-                    mealCount: req.params.mealCount ? req.params.mealCount : 0,
-                    expense: req.params.expense ? req.params.expense : 0,
-                    dueAmount: req.params.dueAmount ? req.params.dueAmount : 0,
-                }
-            })
+        let newUser = new User({
+            name: req.body.name,
+            password: req.body.password,
+            group:{
+                id: req.body.group ? req.body.group : "",
+                deposite: req.params.deposite ? req.params.deposite : 0,
+                mealCount: req.params.mealCount ? req.params.mealCount : 0,
+                expense: req.params.expense ? req.params.expense : 0,
+                dueAmount: req.params.dueAmount ? req.params.dueAmount : 0,
+            }
+        });
+        newUser[id] = newUser._id;
         let user = await newUser.save();
         res.status(200).json({ "user": user });
     } catch (err) {
