@@ -15,11 +15,12 @@ route.post("/", async (req, res) => {
                 dueAmount: req.params.dueAmount ? req.params.dueAmount : 0,
             }
         });
-        newUser[id] = newUser._id;
+        newUser.id = newUser._id;
         let user = await newUser.save();
         res.status(200).json({ "user": user });
     } catch (err) {
-        res.status(500).json({ "error": err })
+        console.log(err);
+        res.status(500).json({ "error": err.stack, message: err.message })
     }
 });
 
