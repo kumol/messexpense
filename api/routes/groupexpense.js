@@ -5,11 +5,14 @@ route.get("/", async(req,res,next)=>{
     try{
         let expense = await GroupExpense.find({});
         return res.status(200).json({
-            "expense": expense
+            body: expense,
+            success: true,
+            statusCode: 200,
+            message: "content found"
         });
     }catch(error){
         res.status(500).json({
-            "body": {"error": error}
+            "body": error.stack
         });
     }
 });
@@ -18,7 +21,7 @@ route.get("/:id", async(req,res,next)=>{
     try{
         let expense = await GroupExpense.findOne({id: req.params.id});
         return res.status(200).json({
-            "body": {"expense": expense}
+            "body": expense
         });
     }catch(error){
         res.status(500).json({
