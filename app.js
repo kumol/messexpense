@@ -38,3 +38,4 @@ app.use("/money", expenseRouter);
 app.use("/user", userRouter);
 app.use("/group", groupRouter);
 app.use("/group-expense", groupExpenseRouter);
+app.use("/meal", require("./api/meal/meal"));
