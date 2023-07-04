@@ -1,13 +1,32 @@
-
 const mongoose = require("mongoose");
-module.exports = mongoose.model("Meal", mongoose.Schema({
-	"userId" : String,
-	"breakfast" : Number,
-	"lunch" : Number,
-	"dinner" : Number,
-	"total" : Number,
-	"groupId" : String,
-	"userName" : String,
-	"date" : String,
-    "id": String
-}));
+
+const mealSchema = new mongoose.Schema({
+    "userId": String,
+    "groupId": String,
+    "userName": String,
+    "month": String,
+    "id": String,
+    "total": Number,
+    "meals": [
+        {
+            "breakfast": Number,
+            "lunch": Number,
+            "dinner": Number,
+            "date": String
+        }
+    ]
+    // "groupId": String,
+    // "id": String,
+    // "date": String,
+    // "meals": [
+    //     {
+    //         "breakfast": Number,
+    //         "lunch": Number,
+    //         "dinner": Number,
+    //         "userName": String,
+    //         "userId": String
+    //     }
+    // ]
+});
+
+module.exports = mongoose.model("Meal", mealSchema, "meal");

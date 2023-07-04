@@ -1,8 +1,14 @@
 const mongoose = require("mongoose");
-module.exports = mongoose.model("Group", mongoose.Schema({
-    name: String,
-    password: String,
-    id: String,
-    user:[String],
-    creator: String,
-}));
+
+const groupSchema = new mongoose.Schema({
+    "name": String,
+    "password": String,
+    "creator": {
+        type: String,
+        required: true
+    },
+    "id": String,
+    mannager: String
+});
+
+module.exports = mongoose.model("Group", groupSchema, "groups");
