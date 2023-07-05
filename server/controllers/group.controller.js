@@ -43,6 +43,16 @@ module.exports = {
         }
     },
 
+    getSingleGroup: async (req, res) => {
+        try {
+            let { id } = req.params;
+            let group = await Group.findOne({ id: id }).lean();
+            return success(res, "", group);
+        } catch (err) {
+            return throughError(res, err);
+        }
+    },
+
     deleteGroup: async (req, res) => {
         try {
             let { id } = req.params;
