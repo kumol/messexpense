@@ -58,8 +58,16 @@ module.exports.throughError = (res, body) => {
     });
 };
 
+module.exports.forbidden = (res, msg, body)=>{
+    return res.status(403).json({
+        statusCode: 403,
+        success: false,
+        message: msg || "Unauthorized",
+        body: body
+    })
+}
 module.exports.badRequest = (res, msg, body) => {
-    return res.status(400).json({
+    return res.status(422).json({
         statusCode: 422,
         success: false,
         message: msg || "Unprocessable Entity",

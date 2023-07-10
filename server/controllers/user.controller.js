@@ -1,10 +1,12 @@
 const User = require("../../models/user");
+const authService = require("../services/auth.service");
+const { forbidden } = require("../shared/utls/httpResponseHandler");
 const { throughError, created, badRequest, success, notFound, notModified } = require("../shared/utls/httpResponseHandler");
 module.exports = {
     addUser: async (req, res) => {
         try {
             let { password, groupId, deposit, mealCount, expense, dueAmount, isEmailVerified, isPhoneVerified, fName, lName, email, phoneNumber, image, status, roleId } = req.body;
-            if (!fName || !lName || !password) {
+            if (!phoneNumber || !fName || !lName || !password) {
                 return badRequest(res, "Name and password are required");
             }
             let newUser = {
@@ -27,7 +29,7 @@ module.exports = {
             newUser.fName = fName.trim();
             newUser.lName = lName.trim();
             newUser.name = fName.trim() + " " + lName.trim();
-            password ? newUser.password = password : null;
+            password ? newUser.password = authService.hashPassword(password) : null;
             newUser.group.deposit = deposit ? deposit : 0;
             newUser.group.mealCount = mealCount ? mealCount : 0;
             newUser.group.expense = expense ? expense : 0;
@@ -99,7 +101,7 @@ module.exports = {
             fName ? updateObj.fName = fName.trim() : null;
             lName ? updateObj.lName = lName.trim() : null;
             fName || lName ? updateObj.name = fName.trim() + " " + lName.trim() : null;
-            password ? updateObj.password = password : null;
+            password ? updateObj.password = authService.hashPassword(password) : null;
             deposit ? updateObj.groupId.deposit = deposit : null;
             mealCount ? updateObj.groupId.mealCount = mealCount : null;
             expense ? updateObj.groupId.expense = expense : null;
@@ -118,6 +120,29 @@ module.exports = {
             let user = await User.findOne({ userId }).select("-__v _id").lean();
             return updated.modifiedCount ? success(res, "", user) : notModified(res, "Unable to modify", user);
         } catch (err) {
+            return throughError(res, err);
+        }
+    },
+
+    login: async(req, res)=>{
+        try{
+            let {phoneNumber, email, password} = req.body;
+            if((!phoneNumber || !password) && (!email || !password)){
+                return badRequest(res, "Passward, phoneNumber or email are requierd")
+            } 
+            let user = await User.findOne({$or: [{email: email}, {phoneNumber: phoneNumber}]}).select("-_v -_id").lean();
+            if(!user){
+                return forbidden(res, "Wrong email or phone number");
+            }
+
+            if(!authService.passwordCompare(password, user.password)){
+                return forbidden(res, "Wrong password")
+            }
+
+            const token = authService.setToken({name: user.name, userId: user.userId, roleId: user.roleId});
+            return success(res, "Successfully loged in", {token: token});
+
+        }catch(err){
             return throughError(res, err);
         }
     }
