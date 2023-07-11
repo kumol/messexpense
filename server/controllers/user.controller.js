@@ -124,25 +124,25 @@ module.exports = {
         }
     },
 
-    login: async(req, res)=>{
-        try{
-            let {phoneNumber, email, password} = req.body;
-            if((!phoneNumber || !password) && (!email || !password)){
+    login: async (req, res) => {
+        try {
+            let { phoneNumber, email, password } = req.body;
+            if ((!phoneNumber || !password) && (!email || !password)) {
                 return badRequest(res, "Passward, phoneNumber or email are requierd")
-            } 
-            let user = await User.findOne({$or: [{email: email}, {phoneNumber: phoneNumber}]}).select("-_v -_id").lean();
-            if(!user){
+            }
+            let user = await User.findOne({ $or: [{ email: email }, { phoneNumber: phoneNumber }] }).select("-_v -_id").lean();
+            if (!user) {
                 return forbidden(res, "Wrong email or phone number");
             }
 
-            if(!authService.passwordCompare(password, user.password)){
+            if (!authService.passwordCompare(password, user.password)) {
                 return forbidden(res, "Wrong password")
             }
 
-            const token = authService.setToken({name: user.name, userId: user.userId, roleId: user.roleId});
-            return success(res, "Successfully loged in", {token: token});
+            const token = authService.setToken({ name: user.name, userId: user.userId, roleId: user.roleId, id: user.id });
+            return success(res, "Successfully loged in", { token: token });
 
-        }catch(err){
+        } catch (err) {
             return throughError(res, err);
         }
     }

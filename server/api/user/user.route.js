@@ -1,7 +1,8 @@
 const userController = require("../../controllers/user.controller");
+const authService = require("../../services/auth.service");
 const route = require("express").Router();
 
-route.get("/details/", userController.getUser);
+route.get("/details/", authService.checkAuth, userController.getUser);
 
 route.post("/details", userController.addUser);
 
