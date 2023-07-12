@@ -116,9 +116,9 @@ module.exports = {
                 updateObj.group.dueAmount = 0;
             }
 
-            let updated = await User.updateOne({ userId: id }, { $set: updateObj });
-            let user = await User.findOne({ userId }).select("-__v _id").lean();
-            return updated.modifiedCount ? success(res, "", user) : notModified(res, "Unable to modify", user);
+            let updated = await User.updateOne({ id: id }, { $set: updateObj });
+            let user = await User.findOne({ id: id }).select("-__v _id").lean();
+            return updated.modifiedCount ? success(res, "", user) : notModified(res, "Not Modified", user);
         } catch (err) {
             return throughError(res, err);
         }
