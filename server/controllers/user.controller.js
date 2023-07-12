@@ -18,7 +18,7 @@ module.exports = {
                 }
             },
                 emailExpression = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                numberExpression = /^\d{10}$/;;
+                numberExpression = /^\d{10}$/;
 
             email && email.match(emailExpression) ? newUser.email = email.trim() : null;
             phoneNumber && phoneNumber.match(numberExpression) ? newUser.phoneNumber = phoneNumber : null;

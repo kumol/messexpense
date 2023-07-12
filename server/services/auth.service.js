@@ -16,7 +16,7 @@ module.exports = {
             if (err.message == "jwt expired") {
                 return forbidden(res, "Your jwt is expired", err.stack);
             }
-            return throughError(res, err);
+            return forbidden(res, "Please login again", err.stack);
         }
     },
     isAdmin: async () => {
@@ -40,6 +40,6 @@ module.exports = {
     setToken: (data) => {
         return jwt.sign({
             data: data
-        }, process.env.SECRET, { expiresIn: '1h' });
+        }, process.env.SECRET, { expiresIn: '24h' });
     }
 }

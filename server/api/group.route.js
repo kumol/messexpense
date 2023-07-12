@@ -1,11 +1,12 @@
 const groupController = require("../controllers/group.controller");
 const groupexpenseController = require("../controllers/groupexpense.controller");
+const authService = require("../services/auth.service");
 
 const route = require("express").Router();
 
-route.post("/", groupController.addGroup);
-route.get("/", groupController.getGroup);
-route.get("/details", groupController.getFullGroup);
+route.post("/details", authService.checkAuth, groupController.addGroup);
+route.get("/details", groupController.getGroup);
+route.get("/details/data/", groupController.getFullGroup);
 route.get("/details/:id", groupController.getSingleGroup);
 route.put("/details/:id", groupController.updateGroup);
 route.delete("/details/:id", groupController.deleteGroup);
