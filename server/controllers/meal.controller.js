@@ -40,7 +40,6 @@ module.exports = {
                     totalMeal = totalMeal + ((m.breakfast || 0) + (m.lunch || 0) + (m.dinner || 0));
                 });
 
-                console.log(totalMeal);
                 let updateMeal = await Meal.findOneAndUpdate({ userId: userId, groupId: groupId, month: month }, { $set: { total: totalMeal, meals: meals } }, { new: true });
 
                 if (updateMeal) {
@@ -61,7 +60,6 @@ module.exports = {
             }
         }
         catch (err) {
-            console.log(err);
             return res.json({
                 success: false,
                 err: err.stack
@@ -89,7 +87,6 @@ module.exports = {
 
 
             let userList = await User.find({ groupId: "62965524d6a881a4909ec7f8" });
-            console.log(userList);
             return res.json({
                 status: 200,
                 success: true,
@@ -97,7 +94,6 @@ module.exports = {
             })
         }
         catch (err) {
-            console.log(err);
             return res.json({
                 success: false,
                 err: err.stack
