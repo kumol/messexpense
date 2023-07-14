@@ -24,6 +24,10 @@ app.use(router);
 require("./models/db");
 
 
+app.use(express.static('public'));
+app.use(express.static('files'));
+app.use('/uploads', express.static("uploads"));
+
 app.listen(process.env.PORT, (err) => {
   console.log("Server is running http://localhost:" + process.env.PORT);
 });
