@@ -9,8 +9,8 @@ module.exports = {
             if (!name && !password) {
                 return badRequest(res, "Name and password are required");
             }
-            let newGroup = { name, password, creator: req.user };
-            newGroup.manager = manager ? manager : req.user;
+            let newGroup = { name, password, creator: req.user.id };
+            newGroup.manager = manager ? manager : req.user.id;
 
             let group = new Group(newGroup);
             group.id = group._id;

@@ -11,8 +11,8 @@ module.exports = {
     addMeal: async (req, res, next) => {
         try {
             let { userId, groupId, userName, lunch, breakfast, dinner, date } = req.body;
-            let user = await User.findOne({ id: req.user }).select("userId groupId roleId").lean()
-            if (req.user != userId && (user.roleId > "2" && user.roleId < "1")) {
+            let user = await User.findOne({ id: req.user.id }).select("userId groupId roleId").lean()
+            if (req.user.id != userId && (user.roleId > "2" && user.roleId < "1")) {
                 return badRequest(res, "You have no access to add meal");
             }
             if (!user.groupId) {
