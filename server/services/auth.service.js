@@ -10,7 +10,7 @@ module.exports = {
                 return forbidden(res, "Please login again", {});
             }
             var decoded = jwt.verify(token, process.env.SECRET);
-            req.user = decoded.data.id
+            req.user = decoded.data;
             next();
         } catch (err) {
             if (err.message == "jwt expired") {

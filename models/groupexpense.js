@@ -11,7 +11,7 @@ module.exports = mongoose.model("GroupExpense", mongoose.Schema({
         type: String,
         default: moment().format("YYYY-MM-DD")
     },
-    group: {
+    groupId: {
         type: String,
         default: ""
     },
@@ -25,6 +25,7 @@ module.exports = mongoose.model("GroupExpense", mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ["utility", "meal"]
+        enum: ["utility", "meal"],
+        default: "meal"
     }
 }));
