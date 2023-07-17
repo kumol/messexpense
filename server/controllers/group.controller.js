@@ -4,20 +4,21 @@ const Group = require("../../models/Group");
 module.exports = {
     addGroup: async (req, res) => {
         try {
-            let { name, password, creator, mannager } = req.body;
+            let { name, password, manager } = req.body;
 
             if (!name && !password) {
                 return badRequest(res, "Name and password are required");
             }
-            let group = new Group({ name: name, password: password, creator: creator, mannager: mannager });
+            let newGroup = { name, password, creator: req.user.id };
+            newGroup.manager = manager ? manager : req.user.id;
+
+            let group = new Group(newGroup);
             group.id = group._id;
             group = await group.save();
             return created(res, "successfully created", group);
         } catch (err) {
             return throughError(res, err);
         }
-
-
     },
     getGroup: async (req, res) => {
         try {

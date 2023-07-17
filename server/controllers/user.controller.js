@@ -18,7 +18,7 @@ module.exports = {
                 }
             },
                 emailExpression = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                numberExpression = /^\d{10}$/;;
+                numberExpression = /^\d{10}$/;
 
             email && email.match(emailExpression) ? newUser.email = email.trim() : null;
             phoneNumber && phoneNumber.match(numberExpression) ? newUser.phoneNumber = phoneNumber : null;
@@ -116,33 +116,33 @@ module.exports = {
                 updateObj.group.dueAmount = 0;
             }
 
-            let updated = await User.updateOne({ userId: id }, { $set: updateObj });
-            let user = await User.findOne({ userId }).select("-__v _id").lean();
-            return updated.modifiedCount ? success(res, "", user) : notModified(res, "Unable to modify", user);
+            let updated = await User.updateOne({ id: id }, { $set: updateObj });
+            let user = await User.findOne({ id: id }).select("-__v _id").lean();
+            return updated.modifiedCount ? success(res, "", user) : notModified(res, "Not Modified", user);
         } catch (err) {
             return throughError(res, err);
         }
     },
 
-    login: async(req, res)=>{
-        try{
-            let {phoneNumber, email, password} = req.body;
-            if((!phoneNumber || !password) && (!email || !password)){
+    login: async (req, res) => {
+        try {
+            let { phoneNumber, email, password } = req.body;
+            if ((!phoneNumber || !password) && (!email || !password)) {
                 return badRequest(res, "Passward, phoneNumber or email are requierd")
-            } 
-            let user = await User.findOne({$or: [{email: email}, {phoneNumber: phoneNumber}]}).select("-_v -_id").lean();
-            if(!user){
+            }
+            let user = await User.findOne({ $or: [{ email: email }, { phoneNumber: phoneNumber }] }).select("-_v -_id").lean();
+            if (!user) {
                 return forbidden(res, "Wrong email or phone number");
             }
 
-            if(!authService.passwordCompare(password, user.password)){
+            if (!authService.passwordCompare(password, user.password)) {
                 return forbidden(res, "Wrong password")
             }
 
-            const token = authService.setToken({name: user.name, userId: user.userId, roleId: user.roleId});
-            return success(res, "Successfully loged in", {token: token});
+            const token = authService.setToken({ name: user.name, userId: user.userId, roleId: user.roleId, id: user.id });
+            return success(res, "Successfully loged in", { token: token });
 
-        }catch(err){
+        } catch (err) {
             return throughError(res, err);
         }
     }
